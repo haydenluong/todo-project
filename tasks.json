@@ -1,0 +1,16 @@
+[
+  {
+    "id": 2,
+    "description": "buy milk",
+    "status": "todo",
+    "createdAt": "2026-06-20T10:36:50.555Z",
+    "updatedAt": "2026-06-20T10:36:50.555Z"
+  },
+  {
+    "id": 3,
+    "description": "buy milk",
+    "status": "todo",
+    "createdAt": "2026-06-20T10:37:05.010Z",
+    "updatedAt": "2026-06-20T10:37:05.010Z"
+  }
+]
