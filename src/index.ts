@@ -34,10 +34,26 @@ function saveTasks(tasks: Task[]): void {
     fs.writeFileSync("tasks.json", data, "utf-8");
 }
 
+function printTask(tasks: Task[]): void {
+    tasks.forEach((task) => {
+        console.log(`${task.id}. [${task.status}] ${task.description}`);
+    });
+}
+
 switch(command) {
+    default: {
+        console.log("Unknown command, idk wtf ur doing");
+        break;
+    }
+
     case "add": {
         const description = rest.join(" ");
         const tasks = loadTasks();
+
+        if (!description) {
+            console.log("Please provide a task description");
+            break;
+        }
 
         // .map(...) is used to create arrays of task IDs, and Math.max(...) is used to find the maximum ID value.
         // the ... is the spread operator, which allows the array of IDs to be passed as individual arguments to Math.max(...).
@@ -63,11 +79,17 @@ switch(command) {
             console.log("Nothing has been added yet!");
             break; 
         } else {
-            
-
-        tasks.forEach((task) => {
-            console.log(`${task.id}. [${task.status}] ${task.description}`);
-        });
+            if (rest[0]) {
+                const statusFilter = rest[0];
+                const filtered = statusFilter ? tasks.filter(t => t.status === statusFilter) : tasks;
+                if (filtered.length === 0) {
+                    console.log(`No tasks found with status ${statusFilter}`);
+                } else {
+                    printTask(filtered);
+                }
+            } else {
+                printTask(tasks);
+                }
     }
         break;
     }
@@ -75,6 +97,11 @@ switch(command) {
         // update {id} {new.description}
         const newID = Number(rest[0]);
         const tasks = loadTasks(); 
+
+        if (isNaN(newID)) {
+            console.log("Please provide a valid task id");
+            break;
+        }
 
         const taskFound = tasks.find((t) => t.id === newID);
 
@@ -93,8 +120,13 @@ switch(command) {
     case "delete": {
         const tasks = loadTasks();
         const deletingID = Number(rest[0]);
-        const updatedTasks = tasks.filter((task) => task.id !== deletingID);
 
+        if (isNaN(deletingID)) {
+            console.log("Please provide a valid task id");
+            break;
+        }
+        const updatedTasks = tasks.filter((task) => task.id !== deletingID);
+    
         if (updatedTasks.length === tasks.length) {
             console.log("Delete was unsucessful!");
         }
@@ -105,6 +137,11 @@ switch(command) {
     case "mark-in-progress": {
         const tasks = loadTasks(); 
         const newID = Number(rest[0]);
+
+        if (isNaN(newID)) {
+            console.log("Please provide a valid task id");
+            break;
+        }
 
         // look for the action with that ID, then change its status 
         const taskFound = tasks.find((t) => t.id === newID);
@@ -125,6 +162,11 @@ switch(command) {
     case "mark-done": {
         const tasks = loadTasks(); 
         const newID = Number(rest[0]);
+
+        if (isNaN(newID)) {
+            console.log("Please provide a valid task id");
+            break;
+        }
 
         // look for the action with that ID, then change its status 
         const taskFound = tasks.find((t) => t.id === newID);
